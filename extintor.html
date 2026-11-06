@@ -1,1 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Recarga de Extintores en Barranquilla | Servicio Técnico</title>
+  <meta name="description" content="Recarga y mantenimiento de extintores en Barranquilla y el Atlántico. Servicio técnico certificado, atención a empresas y hogares. Solicita tu revisión hoy.">
+  <meta name="theme-color" content="#0d3b66">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="robots" content="index, follow">
 
+  <style>
+    :root {
+      --primary: #0d3b66;
+      --primary-dark: #082844;
+      --accent: #ee6c4d;
+      --accent-dark: #d45a3d;
+      --secondary: #1b263b;
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --text: #1b263b;
+      --text-muted: #5c6b7a;
+      --border: #dce3eb;
+      --shadow: 0 4px 18px rgba(13,59,102,0.08);
+      --radius: 18px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --ok: #2a9d8f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      overscroll-behavior: none;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
+      box-shadow: 0 0 50px rgba(0,0,0,0.1);
+    }
+
+    /* Status */
+    .status-bar {
+      height: 26px;
+      background: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #e0e6ed;
+    }
+    .status-bar .icons { display: flex; gap: 5px; font-size: 10px; }
+
+    /* Header */
+    .app-header {
+      background: var(--card);
+      padding: 11px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .brand .dot {
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .brand small {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: block;
+      margin-top: -2px;
+      letter-spacing: 0.3px;
+    }
+
+    .header-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #e8f0f8;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    .header-btn:active { background: #d0e0f0; }
+
+    /* Pages */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Hero */
+    .hero {
+      margin: 14px 14px 0;
+      background: linear-gradient(145deg, #0d3b66 0%, #1b4f8a 55%, #ee6c4d 160%);
+      border-radius: 20px;
+      padding: 22px 18px 20px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+      top: -40px;
+      right: -30px;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
+    }
+    .hero h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .hero p {
+      font-size: 0.88rem;
+      opacity: 0.9;
+      margin-bottom: 16px;
+      max-width: 92%;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-hero {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 11px 18px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-hero:active { background: var(--accent-dark); }
+    .btn-hero.ghost {
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.4);
+    }
+
+    /* Quick actions */
+    .quick-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 16px 14px 6px;
+    }
+    .quick-item {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 12px 6px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .quick-item:active { transform: scale(0.96); }
+    .quick-item .qi {
+      font-size: 1.4rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .quick-item span {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Section */
+    .sec-head {
+      padding: 16px 16px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sec-head h2 {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+    .sec-head a {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Service list */
+    .svc-list {
+      padding: 4px 14px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .svc-item {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      gap: 13px;
+      align-items: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .svc-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #e8f0f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .svc-item h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .svc-item p {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+    }
+    .svc-arrow {
+      margin-left: auto;
+      color: #c0cad4;
+      font-size: 1.1rem;
+    }
+
+    /* Stats / trust */
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 6px 14px 14px;
+    }
+    .stat-box {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 12px 8px;
+      text-align: center;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .stat-box strong {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .stat-box span {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    /* Location note */
+    .loc-banner {
+      margin: 4px 14px 14px;
+      background: #e8f4f0;
+      border: 1px solid #b8ddd0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .loc-banner .loc-ico { font-size: 1.3rem; }
+    .loc-banner p {
+      font-size: 0.8rem;
+      color: #2a6b5a;
+      font-weight: 600;
+    }
+    .loc-banner small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.72rem;
+      opacity: 0.85;
+      margin-top: 1px;
+    }
+
+    /* CTA */
+    .cta-zone {
+      margin: 8px 14px 100px;
+      background: var(--primary);
+      border-radius: 20px;
+      padding: 22px 18px;
+      text-align: center;
+      color: white;
+    }
+    .cta-zone h3 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .cta-zone p {
+      font-size: 0.84rem;
+      opacity: 0.85;
+      margin-bottom: 16px;
+    }
+    .cta-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .btn-cta {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-decoration: none;
+      display: block;
+    }
+    .btn-cta:active { background: var(--accent-dark); }
+    .btn-cta.outline {
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.35);
+    }
+
+    /* Bottom nav */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 7px 0 calc(7px + var(--safe-bottom));
+      z-index: 100;
+      box-shadow: 0 -3px 18px rgba(0,0,0,0.05);
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.62rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+    .nav-item .ni { font-size: 1.25rem; }
+    .nav-item.active { color: var(--primary); }
+
+    /* FAB */
+    .fab {
+      position: fixed;
+      bottom: calc(72px + var(--safe-bottom));
+      right: max(14px, calc(50% - 226px));
+      width: 52px;
+      height: 52px;
+      background: #25d366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.55rem;
+      text-decoration: none;
+      box-shadow: 0 4px 14px rgba(37,211,102,0.4);
+      z-index: 90;
+    }
+    .fab:active { transform: scale(0.93); }
+
+    /* Inner pages */
+    .page-body { padding: 18px 14px 100px; }
+
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 11px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .card h3 {
+      font-size: 0.92rem;
+      margin-bottom: 5px;
+      color: var(--secondary);
+    }
+    .card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .contact-row .ci {
+      width: 46px;
+      height: 46px;
+      background: #e8f0f8;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .contact-row h4 { font-size: 0.88rem; margin-bottom: 1px; }
+    .contact-row p { font-size: 0.76rem; color: var(--text-muted); }
+
+    .note {
+      font-size: 0.68rem;
+      color: #8a96a3;
+      text-align: center;
+      padding: 8px 16px 12px;
+      line-height: 1.4;
+    }
+
+    @media (min-width: 520px) {
+      body { background: #c8d4e0; padding: 18px 0; }
+      .app {
+        border-radius: 26px;
+        overflow: hidden;
+        min-height: calc(100vh - 36px);
+      }
+      .bottom-nav { border-radius: 0 0 26px 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="status-bar">
+    <span id="clock">9:41</span>
+    <div class="icons"><span>📶</span><span>🔋</span></div>
+  </div>
+
+  <header class="app-header">
+    <a href="#" class="brand" onclick="go('inicio'); return false;">
+      <span>
+        Fuego<span style="color:var(--accent)">Listo</span>
+        <small>BARRANQUILLA</small>
+      </span>
+    </a>
+    <button class="header-btn" onclick="go('contacto')" aria-label="Contacto">📞</button>
+  </header>
+
+  <!-- ===== INICIO ===== -->
+  <div id="inicio" class="page active">
+
+    <div class="hero">
+      <div class="hero-badge">SERVICIO EN BARRANQUILLA</div>
+      <h1>Recarga y mantenimiento de extintores</h1>
+      <p>Atención técnica para empresas, comercios y hogares en el Atlántico. Trabajo según normativa vigente.</p>
+      <div class="hero-actions">
+        <a href="https://wa.me/573001112233?text=Hola,%20necesito%20recarga%20o%20mantenimiento%20de%20extintores%20en%20Barranquilla" class="btn-hero" target="_blank" rel="noopener">Pedir servicio</a>
+        <a href="#" class="btn-hero ghost" onclick="go('servicios'); return false;">Ver servicios</a>
+      </div>
+    </div>
+
+    <div class="quick-row">
+      <a href="#" class="quick-item" onclick="go('servicios'); return false;">
+        <span class="qi">🔄</span>
+        <span>Recarga</span>
+      </a>
+      <a href="#" class="quick-item" onclick="go('servicios'); return false;">
+        <span class="qi">🔧</span>
+        <span>Mantención</span>
+      </a>
+      <a href="#" class="quick-item" onclick="go('servicios'); return false;">
+        <span class="qi">📝</span>
+        <span>Revisión</span>
+      </a>
+      <a href="#" class="quick-item" onclick="go('contacto'); return false;">
+        <span class="qi">📍</span>
+        <span>Cobertura</span>
+      </a>
+    </div>
+
+    <div class="sec-head">
+      <h2>Qué hacemos</h2>
+      <a href="#" onclick="go('servicios'); return false;">Detalle</a>
+    </div>
+
+    <div class="svc-list">
+      <div class="svc-item">
+        <div class="svc-icon">🔄</div>
+        <div>
+          <h3>Recarga de agentes</h3>
+          <p>PQS, CO₂, agua y espuma según tipo de equipo</p>
+        </div>
+        <span class="svc-arrow">›</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">🔧</div>
+        <div>
+          <h3>Mantenimiento técnico</h3>
+          <p>Manómetro, válvulas, mangueras y precintos</p>
+        </div>
+        <span class="svc-arrow">›</span>
+      </div>
+      <div class="svc-item">
+        <div class="svc-icon">📝</div>
+        <div>
+          <h3>Inspección y registro</h3>
+          <p>Revisión periódica con documentación del servicio</p>
+        </div>
+        <span class="svc-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <strong>BAQ</strong>
+        <span>Barranquilla</span>
+      </div>
+      <div class="stat-box">
+        <strong>+Atl.</strong>
+        <span>Área metropolitana</span>
+      </div>
+      <div class="stat-box">
+        <strong>Doc.</strong>
+        <span>Con registro</span>
+      </div>
+    </div>
+
+    <div class="loc-banner">
+      <div class="loc-ico">📍</div>
+      <p>
+        Cobertura en Barranquilla y alrededores
+        <small>Soledad, Malambo, Puerto Colombia y más</small>
+      </p>
+    </div>
+
+    <div class="cta-zone">
+      <h3>¿Tus extintores necesitan revisión?</h3>
+      <p>Escríbenos y te orientamos según cantidad, tipo y ubicación.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/573001112233?text=Hola,%20quiero%20información%20de%20recarga%20de%20extintores%20en%20Barranquilla" class="btn-cta" target="_blank" rel="noopener">💬 WhatsApp</a>
+        <a href="tel:+573001112233" class="btn-cta outline">📞 Llamar</a>
+      </div>
+    </div>
+
+    <p class="note">
+      Servicio de recarga y mantenimiento de extintores en Barranquilla. 
+      La información es orientativa. Confirme condiciones y plazos directamente con nosotros.
+    </p>
+  </div>
+
+  <!-- ===== SERVICIOS ===== -->
+  <div id="servicios" class="page">
+    <div class="page-body">
+      <h2 style="font-size:1.1rem; margin-bottom:14px; color:var(--secondary);">Servicios técnicos</h2>
+
+      <div class="card">
+        <h3>🔄 Recarga de extintores</h3>
+        <p>Recargamos equipos de polvo químico seco, dióxido de carbono, agua y espuma. Se evalúa el estado del cilindro y se reemplazan componentes cuando es necesario.</p>
+      </div>
+
+      <div class="card">
+        <h3>🔧 Mantenimiento</h3>
+        <p>Revisión de presión, válvulas, mangueras, boquillas, manómetros y precintos. Se realizan las correcciones dentro del alcance del servicio técnico.</p>
+      </div>
+
+      <div class="card">
+        <h3>📝 Inspección periódica</h3>
+        <p>Verificación del estado operativo y de los plazos de revisión. Entregamos registro del trabajo realizado para su control interno.</p>
+      </div>
+
+      <div class="card">
+        <h3>🏷️ Documentación</h3>
+        <p>Cada servicio incluye etiqueta o constancia con fecha y datos del trabajo. Útil para auditorías y requisitos de seguridad.</p>
+      </div>
+
+      <div class="card">
+        <h3>🧯 Equipos nuevos</h3>
+        <p>También orientamos sobre la adquisición de extintores nuevos según el tipo de riesgo y el lugar de uso.</p>
+      </div>
+
+      <div class="cta-zone" style="margin:16px 0 0;">
+        <h3>Solicita orientación</h3>
+        <p>Indica tipo de extintor, cantidad y zona de Barranquilla.</p>
+        <div class="cta-btns">
+          <a href="https://wa.me/573001112233?text=Hola,%20quiero%20cotizar%20servicio%20de%20extintores%20en%20Barranquilla" class="btn-cta" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ZONAS ===== -->
+  <div id="zonas" class="page">
+    <div class="page-body">
+      <h2 style="font-size:1.1rem; margin-bottom:14px; color:var(--secondary);">Cobertura</h2>
+
+      <div class="card">
+        <h3>📍 Barranquilla</h3>
+        <p>Atendemos barrios y zonas industriales de la ciudad. Coordina día y horario según disponibilidad.</p>
+      </div>
+
+      <div class="card">
+        <h3>🏙️ Área metropolitana</h3>
+        <p>Soledad, Malambo, Puerto Colombia, Galapa y municipios cercanos del Atlántico. Consulta cobertura exacta al contactarnos.</p>
+      </div>
+
+      <div class="card">
+        <h3>🏢 Empresas y comercios</h3>
+        <p>Servicio para oficinas, locales comerciales, bodegas e industria. Podemos programar visitas según tu operación.</p>
+      </div>
+
+      <div class="card">
+        <h3>🏠 Hogares y conjuntos</h3>
+        <p>También atendemos residencias y conjuntos residenciales que requieran recarga o revisión de equipos.</p>
+      </div>
+
+      <div class="loc-banner" style="margin:8px 0 0;">
+        <div class="loc-ico">ℹ️</div>
+        <p>
+          Disponibilidad según agenda
+          <small>Confirma turno y zona por WhatsApp o llamada</small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CONTACTO ===== -->
+  <div id="contacto" class="page">
+    <div class="page-body">
+      <h2 style="font-size:1.1rem; margin-bottom:14px; color:var(--secondary);">Contacto</h2>
+
+      <a href="https://wa.me/573001112233?text=Hola,%20necesito%20servicio%20de%20extintores%20en%20Barranquilla" class="contact-row" target="_blank" rel="noopener">
+        <div class="ci">💬</div>
+        <div>
+          <h4>WhatsApp</h4>
+          <p>Respuesta en horario laboral</p>
+        </div>
+      </a>
+
+      <a href="tel:+573001112233" class="contact-row">
+        <div class="ci">📞</div>
+        <div>
+          <h4>Teléfono</h4>
+          <p>+57 300 111 2233</p>
+        </div>
+      </a>
+
+      <div class="contact-row">
+        <div class="ci">📧</div>
+        <div>
+          <h4>Correo</h4>
+          <p>contacto@fuegolisto.co</p>
+        </div>
+      </div>
+
+      <div class="contact-row">
+        <div class="ci">📍</div>
+        <div>
+          <h4>Ciudad</h4>
+          <p>Barranquilla, Atlántico</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:6px;">
+        <h3>Horario de atención</h3>
+        <p>
+          Lunes a Viernes: 8:00 a.m. – 5:30 p.m.<br>
+          Sábados: 8:00 a.m. – 12:30 p.m.<br>
+          Domingos y festivos: solo coordinación previa
+        </p>
+      </div>
+
+      <p class="note" style="margin-top:18px;">
+        FuegoListo — Recarga y mantenimiento de extintores en Barranquilla.<br>
+        Información orientativa. Condiciones, plazos y precios se confirman al contactar.
+      </p>
+    </div>
+  </div>
+
+  <!-- Bottom nav -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active" onclick="go('inicio'); return false;" data-p="inicio">
+      <span class="ni">🏠</span>Inicio
+    </a>
+    <a href="#" class="nav-item" onclick="go('servicios'); return false;" data-p="servicios">
+      <span class="ni">🧯</span>Servicios
+    </a>
+    <a href="#" class="nav-item" onclick="go('zonas'); return false;" data-p="zonas">
+      <span class="ni">📍</span>Zonas
+    </a>
+    <a href="#" class="nav-item" onclick="go('contacto'); return false;" data-p="contacto">
+      <span class="ni">📞</span>Contacto
+    </a>
+  </nav>
+
+  <a href="https://wa.me/573001112233?text=Hola,%20necesito%20recarga%20de%20extintores%20en%20Barranquilla" 
+     class="fab" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+
+</div>
+
+<script>
+  function updateClock() {
+    var n = new Date();
+    var h = n.getHours().toString().padStart(2, '0');
+    var m = n.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').textContent = h + ':' + m;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  function go(id) {
+    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    var btn = document.querySelector('.nav-item[data-p="' + id + '"]');
+    if (btn) btn.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
